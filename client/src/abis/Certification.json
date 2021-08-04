@@ -1,0 +1,217 @@
+{
+  "contractName": "Certification",
+  "abi": [
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.5.16+commit.9c3226ce\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"project:/src/contracts/Certifications.sol\":\"Certification\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/src/contracts/Certifications.sol\":{\"keccak256\":\"0x479697f5f6bb005d5a92dd97c0731d5319b0190b7dbcf972208223f7aa17af0a\",\"urls\":[\"bzz-raw://afc7718206a3cef16e98908e2201a6a58bccbc27d83a7907f4247c31098e1df8\",\"dweb:/ipfs/QmXk24qen49wSrAXWrGPdo3bAvPjmWAJbtNgxboRxupatS\"]}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50603e80601d6000396000f3fe6080604052600080fdfea265627a7a72315820d470fcdba3f6a9489ed10fe6aee5787a51dd395f86b3ba01ad8f6a1c526ec7e964736f6c63430005100032",
+  "deployedBytecode": "0x6080604052600080fdfea265627a7a72315820d470fcdba3f6a9489ed10fe6aee5787a51dd395f86b3ba01ad8f6a1c526ec7e964736f6c63430005100032",
+  "sourceMap": "25:57:0:-;;;53:27;8:9:-1;5:2;;;30:1;27;20:12;5:2;53:27:0;25:57;;;;;;",
+  "deployedSourceMap": "25:57:0:-;;;;;",
+  "source": "pragma solidity ^0.5.0;\n\ncontract Certification {\n\n  constructor() public {\n\n  }\n}\n",
+  "sourcePath": "/home/hp15/Documents/Info/M2/Projet-M2/client/src/contracts/Certifications.sol",
+  "ast": {
+    "absolutePath": "project:/src/contracts/Certifications.sol",
+    "exportedSymbols": {
+      "Certification": [
+        6
+      ]
+    },
+    "id": 7,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:0"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 6,
+        "linearizedBaseContracts": [
+          6
+        ],
+        "name": "Certification",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": {
+              "id": 4,
+              "nodeType": "Block",
+              "src": "74:6:0",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 5,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "parameters": {
+              "id": 2,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "64:2:0"
+            },
+            "returnParameters": {
+              "id": 3,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "74:0:0"
+            },
+            "scope": 6,
+            "src": "53:27:0",
+            "stateMutability": "nonpayable",
+            "superFunction": null,
+            "visibility": "public"
+          }
+        ],
+        "scope": 7,
+        "src": "25:57:0"
+      }
+    ],
+    "src": "0:83:0"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "project:/src/contracts/Certifications.sol",
+      "exportedSymbols": {
+        "Certification": [
+          6
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "^",
+            "0.5",
+            ".0"
+          ]
+        },
+        "id": 1,
+        "name": "PragmaDirective",
+        "src": "0:23:0"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            6
+          ],
+          "name": "Certification",
+          "scope": 7
+        },
+        "children": [
+          {
+            "attributes": {
+              "documentation": null,
+              "implemented": true,
+              "isConstructor": true,
+              "kind": "constructor",
+              "modifiers": [
+                null
+              ],
+              "name": "",
+              "scope": 6,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2,
+                "name": "ParameterList",
+                "src": "64:2:0"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 3,
+                "name": "ParameterList",
+                "src": "74:0:0"
+              },
+              {
+                "attributes": {
+                  "statements": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 4,
+                "name": "Block",
+                "src": "74:6:0"
+              }
+            ],
+            "id": 5,
+            "name": "FunctionDefinition",
+            "src": "53:27:0"
+          }
+        ],
+        "id": 6,
+        "name": "ContractDefinition",
+        "src": "25:57:0"
+      }
+    ],
+    "id": 7,
+    "name": "SourceUnit",
+    "src": "0:83:0"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.16+commit.9c3226ce.Emscripten.clang"
+  },
+  "networks": {
+    "5777": {
+      "events": {},
+      "links": {},
+      "address": "0xB01d033BE3F49239E863c13D1A905C99DEf9906e",
+      "transactionHash": "0x4e7381ed2b6c84d6bdb1433d5c4dea22d18113c2ea5a5bb8a87959ec6fe9aef4"
+    }
+  },
+  "schemaVersion": "3.4.1",
+  "updatedAt": "2021-08-04T23:03:52.728Z",
+  "networkType": "ethereum",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

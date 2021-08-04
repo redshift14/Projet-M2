@@ -16,7 +16,6 @@ function MyNavbar() {
       issuerLoggedin: ${issuerLoggedin}
     `);
 
-
   return (
       <Navbar bg='dark' expand='lg' variant='dark'>
         <Container>
