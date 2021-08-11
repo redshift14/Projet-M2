@@ -1,26 +1,62 @@
-import React, {useState} from 'react';
-import { Document, Page, pdfjs } from 'react-pdf';
+import React, {useEffect} from 'react';
+import { Table } from 'react-bootstrap';
+import moment from 'moment';
+import './issuerConsult.css';
+import { convertBytes } from './convertBytes';
 
-const ipfsAPI = require("ipfs-api");
-const ipfs = ipfsAPI("ipfs.infura.io", "5001", { protocol: "https" });
+function IssuerConsult(props) {
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-
-function IssuerConsult() {
-
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-  }
-
-  // const url = 'https://ipfs.infura.io/ipfs/Qmf7Pxjzht2A8XNFpmLQXbsGNh45LcnwLnSRkFW3gsYj7i'
-  ;
+  useEffect(() => {
+    props.loadCertsTable();
+    return () => {
+      props.setCerts([]);
+    }
+  }, [])
 
   return (
-    <div>
-      <h1>This page where you consult previous documents</h1>
+    <div className='issuer-consult-page'>
+      <div className='table-container'>
+        <Table striped bordered hover className='table'>
+          <thead style={{fontSize:'13px'}}>
+            <tr>
+              <th scop="col" style={{width: '10px'}}>#</th>
+              <th scope="col" style={{ width: '200px'}}>Student Name</th>
+              <th scope="col" style={{ width: '200px'}}>Certificate Title</th>
+              <th scope="col" style={{ width: '200px'}}>University</th>
+              <th scope="col" style={{ width: '200px'}}>File Size</th>
+              <th scope="col" style={{ width: '300px'}}>Upload Date</th>
+              <th scope="col" style={{ width: '200px'}}>Uploader</th>
+              <th scope="col" style={{ width: '200px'}}>View</th>
+            </tr>
+          </thead>
+          { 
+            props.certs.map((cert, key) => { 
+              return (
+                <thead key={key} style={{fontSize:'12px', textAlign:'center'}}>
+                  <tr>
+                    <td>{cert.certId}</td>
+                    <td>{cert.studentName}</td>
+                    <td>{cert.certTitle}</td>
+                    <td>{cert.univName}</td>
+                    <td>{convertBytes(cert.certSize)}</td>
+                    <td>{moment.unix(cert.uploadTime).format('M/D/Y')}</td>
+                    <td>{cert.uploade}</td>
+                    <td>
+                      <a
+                        href={"https://ipfs.infura.io/ipfs/" + cert.certHash}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {cert.certHash}
+                      </a>
+                    </td>
+                  </tr>
+                </thead>
+              )
+            })
+          }
+        </Table>
+      </div>
     </div>
   );
 }

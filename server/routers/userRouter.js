@@ -2,6 +2,7 @@ const router = require('express').Router();
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const sendEmail = require('../utils/sendEmail');
 
 router.post('/register', async (req, res) => {
 
@@ -170,5 +171,19 @@ router.get('/logout', (req, res) => {
   })
   .send();
 });
+
+router.post('/sendMail', async (req, res) => {
+  try {
+    await sendEmail({
+      to: req.body.to,
+      subject: 'Certification',
+      text: req.body.message
+    })
+    res.status(200).json({ sucess: true, data: 'Email Sent'});
+  }
+  catch (error) {
+    console.log(error);
+  }
+})
 
 module.exports = router;

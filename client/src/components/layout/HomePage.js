@@ -1,8 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import landingImage from '../../img/landing1.png';
 import './homePage.css';
 
-function HomePage() {
+function HomePage(props) {
+
+  useEffect(() => {
+    if(props.issuerLoggedin === true) {
+      props.loadWeb3();
+      props.loadBlockchainData();
+    }
+    if (props.verifierLoggedin === false) {
+      props.loadWeb3();
+      props.loadBlockchainData();
+    }
+  }, [])
 
   return (
 

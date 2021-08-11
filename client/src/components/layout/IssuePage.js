@@ -1,25 +1,21 @@
-import React, {useState} from 'react';
-import { PDFViewer, pdf } from '@react-pdf/renderer';
-import styles from './IssueDocumentStyle';
-import './issuePage.css';
 import MyDocument from './MyDocument';
+import React, {useState, useEffect} from 'react';
+import { PDFViewer, pdf } from '@react-pdf/renderer';
+import './issuePage.css';
 import { Button } from 'react-bootstrap';
 import NewWindow from 'react-new-window';
+import axios from 'axios';
 
 const { create } = require('ipfs-http-client');
 const ipfs = create({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
 
-// Pour tester l'upload sans remplir le formulaire décommenter la button Test en la ligne 397
+function IssuePage(props) {
 
-function IssuePage() {
-
-  const [fileHash, setFileHash] = useState('');
+  const [certificationContract, setCertificationContract] = useState(null);
 
   const [popup, setPopup] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  // const [certHash, setCertHash] = useState('');
 
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -44,8 +40,6 @@ function IssuePage() {
   const [rankingNote, setRankingNote] = useState('');
   const [otherNotes, setOtherNotes] = useState('');
 
-  // const [rendereredCertHash, setRendereredCertHash] = useState('');
-
   const [rendereredName, setRendereredName] = useState('');
   const [rendereredLastName, setRendereredLastName] = useState('');
   const [rendereredDob, setRendereredDob] = useState('');
@@ -68,6 +62,12 @@ function IssuePage() {
   const [rendereredEvaluation, setRendereredEvaluation] = useState('');
   const [rendereredRanking, setRendereredRanking] = useState('');
   const [rendereredOtherNotes, setRendereredOtherNotes] = useState('');
+
+  useEffect(() => {
+    props.loadWeb3();
+    props.loadBlockchainData();
+    setCertificationContract(props.certificationContract);
+  }, [])
 
   function HandleClick(e) {
     e.preventDefault();
@@ -97,19 +97,23 @@ function IssuePage() {
 
   const getPdfBlob = async () => {
     try {
-      const blobPdf = await pdf(MyDocument(rendereredName, rendereredLastName, rendereredDob,
-      rendereredPod, rendereredCardNumber, rendereredHolderEmail, rendereredCertTitle, rendereredCertField,
-      rendereredCertFaculty, rendereredCertSpecialty, rendereredCertLevel, rendereredCertYear, rendereredUnivDem,
-      rendereredUnivInstitut, rendereredUnivDep, rendereredUnivAdress, rendereredUnivTel, rendereredUnivSite,
-      rendereredTotalMark, rendereredEvaluation, rendereredRanking, rendereredOtherNotes)).toBlob();
-      return blobPdf;
+      const blobPdf = await pdf(
+        <MyDocument 
+          name={name} lastName={lastName} dob={dob} pod={pod} cardNumber={cardNumber} holderEmail={holderEmail}
+          certTitle={certTitle} certField={certField} certFaculty={certFaculty} certSpecialty={certSpecialty}
+          certLevel={certLevel} certYear={certYear} univDem={univDem} univInstitut={univInstitut} univDep={univDep}
+          univAddress={univAddress} univTel={univTel} univSite={univSite} totalMark ={totalMark}
+          evaluationNote={evaluationNote} rankingNote={rankingNote} otherNotes={otherNotes} 
+        />
+      ).toBlob();
+      return blobPdf
     }
     catch(error) {
       console.log(error);
     }
   }
 
-  async function submitToIpfs(e) {
+  async function submitCert(e) {
     e.preventDefault();
 
     if(!name || !lastName || !dob || !pod || !cardNumber || !holderEmail || !certTitle ||
@@ -124,35 +128,68 @@ function IssuePage() {
     else {
       setError('');
       const myPdf = await getPdfBlob();
-      console.log(myPdf);
+      console.log('mypdf: ', myPdf);
       console.log('submitting the form');
       const result = await ipfs.add(myPdf);
-      console.log(result);
       const fileHash = result["path"];
-      console.log(fileHash);
-      setSuccess(`File uploaded to IPFS successfully, file hash: ${fileHash}`);
-      setTimeout(() => {
-        setSuccess("");
-      }, 10000);
-      // setRendereredCertHash(fileHash);
+      const fileSize = result["size"];
+      const fullName = name + ' ' + lastName;
+      console.log('Result ipfs: ', result);
+      props.certificationContract.methods.uploadCert(
+        fileHash, fileSize, fullName, certTitle, univDem
+      )
+      .send({from: props.accountAddress})
+      .on('transactionHash', (hash) => {
+        handleEmail(fileHash);
+        setSuccess('File uploaded successfully and sent to the student');
+        setTimeout(() => {
+          setSuccess("");
+        }, 10000);
+      });
     }
   }
 
   const captureTestFile = async () => {
     const myPdf = await getPdfBlob();
-    console.log(myPdf);
+    console.log('mypdf: ', myPdf);
     console.log('submitting the form');
     const result = await ipfs.add(myPdf);
-    console.log(result);
     const fileHash = result["path"];
-    console.log(fileHash);
-    setSuccess(`File uploaded to IPFS successfully, file hash: ${fileHash}`);
-    setTimeout(() => {
-      setSuccess("");
-    }, 10000);
-    // setRendereredCertHash(fileHash);
+    const fileSize = result["size"];
+    const fullName = name + ' ' + lastName;
+    console.log('Result ipfs: ', result);
+    props.certificationContract.methods.uploadCert(
+      fileHash, fileSize, fullName, certTitle, univDem
+    )
+    .send({from: props.accountAddress})
+    .on('transactionHash', (hash) => {
+      handleEmail(fileHash);
+      setSuccess('File uploaded successfully and sent to the student');
+      setTimeout(() => {
+        setSuccess("");
+      }, 10000);
+    });
   }
 
+  const handleEmail = async (h) => {
+    console.log('Sending Email');
+    const config = {
+      header: {
+        "Content-Type": "application/json"
+      }
+    }
+    try {
+      const to = holderEmail;
+      const link = `https://ipfs.infura.io/ipfs/${h}`
+      const message = `Your certificate hash is ${h} you can view your certficate here: ${link}`;
+      const data = { to, message } 
+      await axios.post('http://localhost:5000/auth/sendMail', data, config);
+      console.log("Email Sent")
+    }
+    catch (error) {
+      console.log(error.response.data.error);
+    }
+  }
 
   return (
     <>
@@ -378,28 +415,23 @@ function IssuePage() {
           >
             Preview
           </Button>
-          <Button onClick={submitToIpfs} className='btnSubmit' size='sm'>Submit</Button>
+          <Button  className='btnSubmit' size='sm'>Submit</Button>
         </div>
       </form>
     </div>
-{/*
-    <div>
-    <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf">
-      {({ blob, url, loading, error }) =>
-        loading ? 'Loading document...' : 'Download now!'
-      }
-    </PDFDownloadLink>
-  </div> */}
 
-  {/* <div>
+    <div>
+  </div>
+
+  <div>
     <button onClick={captureTestFile}>Test</button>
-  </div> */}
+  </div>
 
     {popup && (
         <NewWindow title='Document Preview'>
           <div>
-            <div className='PDFViewer-container'>
-              <PDFViewer style={styles.viewer}>
+            <div>
+              <PDFViewer style={{width: '100%', height:'100%', border:'none'}}>
                 <MyDocument
                   name={rendereredName}
                   lastName={rendereredLastName}

@@ -4,17 +4,11 @@ import LogoutBtn from '../../auth/LogoutBtn';
 import { Navbar, Container, Nav} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap'
 
-function MyNavbar() {
+function MyNavbar(props) {
 
   const {studentLoggedin} = useContext(AuthContext);
   const {verifierLoggedin} = useContext(AuthContext);
   const {issuerLoggedin} = useContext(AuthContext);
-
-  console.log(`
-      studentloggedin: ${studentLoggedin}
-      verifierLoggedin: ${verifierLoggedin}
-      issuerLoggedin: ${issuerLoggedin}
-    `);
 
   return (
       <Navbar bg='dark' expand='lg' variant='dark'>
@@ -66,7 +60,7 @@ function MyNavbar() {
               {
                 (studentLoggedin === false && verifierLoggedin === false && issuerLoggedin === true) && (
                   <>
-                  <Nav className='justify-content-center' style={{ flex: 1}}>
+                  <Nav className='justify-content-start' style={{ flex: 1}}>
                     <LinkContainer to='/issuer'>
                       <Nav.Link>Issue</Nav.Link>
                     </LinkContainer>
@@ -74,6 +68,16 @@ function MyNavbar() {
                       <Nav.Link>Consult</Nav.Link>
                     </LinkContainer>
                   </Nav>
+                  <Nav.Item>
+                    <Nav.Link
+                      target="_blank"
+                      style={{color:'white', marginRight:'10px', fontSize: '15px'}}
+                      href={"https://etherscan.io/address/" + props.accountAddress}
+                    >
+                      {props.accountAddress ? props.accountAddress.substring(0,6) : '0x0'}
+                      ...{props.accountAddress ? props.accountAddress.substring(38,42) : '0x0'}
+                    </Nav.Link>
+                  </Nav.Item>
                   <LogoutBtn />
                   </>
                 )

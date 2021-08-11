@@ -1,0 +1,17 @@
+.issuer-consult-page {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.table-container {
+    width: 1200px;
+    padding: 1.5rem;
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+    background: #fff;
+}
+
+.table {
+    text-align: center;
+    
+}
