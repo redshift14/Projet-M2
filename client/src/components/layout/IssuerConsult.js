@@ -10,45 +10,69 @@ function IssuerConsult(props) {
     props.loadCertsTable();
     return () => {
       props.setCerts([]);
+      props.setCertHashes([]);
     }
   }, [])
 
   return (
     <div className='issuer-consult-page'>
       <div className='table-container'>
-        <Table striped bordered hover className='table'>
-          <thead style={{fontSize:'13px'}}>
+        <Table striped bordered hover className='table table-1' responsive='md'>
+          <thead style={{fontSize:'12px'}}>
             <tr>
-              <th scop="col" style={{width: '10px'}}>#</th>
-              <th scope="col" style={{ width: '200px'}}>Student Name</th>
+              <th scope="col" style={{width: '10px'}}>#</th>
+              <th scope="col" style={{ width: '300px'}}>Student Name</th>
               <th scope="col" style={{ width: '200px'}}>Certificate Title</th>
-              <th scope="col" style={{ width: '200px'}}>University</th>
-              <th scope="col" style={{ width: '200px'}}>File Size</th>
-              <th scope="col" style={{ width: '300px'}}>Upload Date</th>
-              <th scope="col" style={{ width: '200px'}}>Uploader</th>
-              <th scope="col" style={{ width: '200px'}}>View</th>
+              <th scope="col" style={{ width: '150px'}}>File Size</th>
+              <th scope="col" style={{ width: '150px'}}>Upload Date</th>
+              <th scope="col" style={{ width: '150px'}}>Uploader</th>
             </tr>
           </thead>
           { 
             props.certs.map((cert, key) => { 
               return (
-                <thead key={key} style={{fontSize:'12px', textAlign:'center'}}>
+                <thead key={key} style={{fontSize:'11px', textAlign:'center'}}>
                   <tr>
-                    <td>{cert.certId}</td>
+                    <td>{cert.index}</td>
                     <td>{cert.studentName}</td>
                     <td>{cert.certTitle}</td>
-                    <td>{cert.univName}</td>
                     <td>{convertBytes(cert.certSize)}</td>
                     <td>{moment.unix(cert.uploadTime).format('M/D/Y')}</td>
-                    <td>{cert.uploade}</td>
                     <td>
                       <a
-                        href={"https://ipfs.infura.io/ipfs/" + cert.certHash}
-                        rel="noopener noreferrer"
                         target="_blank"
+                        href={"https://etherscan.io/address/" + cert.uploader}
                       >
-                        {cert.certHash}
+                        {cert.uploader ? cert.uploader.substring(0,6) : '0x0'}
+                        ...{cert.uploader ? cert.uploader.substring(38,42) : '0x0'}
                       </a>
+                    </td>
+                  </tr>
+                </thead>
+              )
+            })
+          }
+        </Table>
+
+        <Table striped bordered hover className='table table-2' responsive='md'> 
+          <thead style={{fontSize:'12px'}}>
+            <tr>
+              <th scope="col" style={{ width: '100px'}}>View</th>
+            </tr>
+          </thead>
+          {
+            props.certsHashes.map((certHash, key) => {
+              return (
+                <thead key={key} style={{fontSize:'11px', textAlign:'center'}}>
+                  <tr>
+                    <td>
+                      <a
+                          href={"https://ipfs.infura.io/ipfs/" + certHash}
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          {certHash}
+                        </a>
                     </td>
                   </tr>
                 </thead>

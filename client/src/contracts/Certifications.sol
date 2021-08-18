@@ -1,57 +1,60 @@
-pragma solidity 0.8.6;
+pragma solidity >=0.5.0 <0.6.0;
 // SPDX-License-Identifier: MIT
 
 contract Certification {
+    struct Cert {
+        string certHash;
+        uint certSize;
+        string studentName;
+        string certTitle;
+        uint uploadTime;
+        address uploader;
+        uint index;
+    }
 
-  string public name = 'Certification';
-  uint public certCount = 0;
-  address public owner;
+    mapping (string => Cert) public certs;
+    string[] public certIndex;
 
-  mapping( uint => Cert ) public certs;
+    event LogNewCert (string certHash, uint certSize, string studentName, string certTitle, uint uploadTime, address uploader, uint index);
 
-  struct Cert {
-    uint certId;
-    string certHash;
-    uint certSize;
-    string studentName;
-    string certTitle;
-    string univName;
-    uint uploadTime;
-    address payable uploade;
-  }
+    function isExist(string memory certHash) public view returns (bool isIndeed) {
+        if(certIndex.length == 0) return false;
+        return (compareStrings(certIndex[certs[certHash].index], certHash));
+    }
 
-  event CertUploaded(
-    uint certId,
-    string certHash,
-    uint certSize,
-    string studentName,
-    string certTitle,
-    string univName,
-    uint uploadTime,
-    address payable uploader
-  );
+    function insertCert(
+        string memory _certHash,
+        uint _certSize,
+        string memory _certTitle,
+        string memory _studentName
+        ) public returns(uint _index) {
 
-  constructor() {
-    owner = msg.sender;
-  }
+        certs[_certHash].certSize = _certSize;
+        certs[_certHash].studentName = _studentName;
+        certs[_certHash].certTitle = _certTitle;
+        certs[_certHash].uploadTime = block.timestamp;
+        certs[_certHash].uploader = msg.sender;
+        certs[_certHash].index = certIndex.push(_certHash)-1;
 
-  function uploadCert(
-    string memory _certHash,
-    uint _certSize,
-    string memory _studentName,
-    string memory _certTitle,
-    string memory _univName
-  ) public {
-    require(bytes(_certHash).length > 0);
-    require(bytes(_studentName).length > 0);
-    require(bytes(_certTitle).length > 0);
-    require(bytes(_univName).length > 0);
-    require(msg.sender!=address(0));
-    require(_certSize>0);
-    certCount ++;
-    // Add cert to the contract
-    certs[certCount] = Cert(certCount, _certHash, _certSize, _studentName, _certTitle, _univName, block.timestamp, payable(owner));
-    // Trigger an event
-    emit CertUploaded(certCount, _certHash, _certSize, _studentName, _certTitle, _univName, block.timestamp, payable(owner));
-  }
+        // certs[_certHash] = Cert(_certHash, _certSize, _studentName, block.timestamp, msg.sender, certIndex.push(_certHash)-1);
+
+        emit LogNewCert(
+            _certHash,
+            _certSize,
+            _studentName,
+            _certTitle,
+            block.timestamp,
+            msg.sender,
+            certs[_certHash].index
+        );
+        return certIndex.length -1;
+    }
+
+    function getCertsCount() public view returns (uint _count) {
+        return certIndex.length;
+    }
+
+    function compareStrings(string memory a, string memory b) private pure returns (bool) {
+        return (keccak256(abi.encodePacked((a))) == keccak256(abi.encodePacked((b))));
+    }
 }

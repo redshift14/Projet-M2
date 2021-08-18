@@ -126,17 +126,16 @@ function IssuePage(props) {
       }, 3000);
     }
     else {
-      setError('');
       const myPdf = await getPdfBlob();
-      console.log('mypdf: ', myPdf);
       console.log('submitting the form');
       const result = await ipfs.add(myPdf);
       const fileHash = result["path"];
       const fileSize = result["size"];
       const fullName = name + ' ' + lastName;
       console.log('Result ipfs: ', result);
-      props.certificationContract.methods.uploadCert(
-        fileHash, fileSize, fullName, certTitle, univDem
+      console.log('Uploader address', props.accountAddress);
+      props.certificationContract.methods.insertCert(
+        fileHash, fileSize, certTitle, fullName 
       )
       .send({from: props.accountAddress})
       .on('transactionHash', (hash) => {
@@ -158,8 +157,9 @@ function IssuePage(props) {
     const fileSize = result["size"];
     const fullName = name + ' ' + lastName;
     console.log('Result ipfs: ', result);
-    props.certificationContract.methods.uploadCert(
-      fileHash, fileSize, fullName, certTitle, univDem
+    console.log('Uploader address', props.accountAddress);
+    props.certificationContract.methods.insertCert(
+      fileHash, fileSize, certTitle, fullName 
     )
     .send({from: props.accountAddress})
     .on('transactionHash', (hash) => {
@@ -415,7 +415,7 @@ function IssuePage(props) {
           >
             Preview
           </Button>
-          <Button  className='btnSubmit' size='sm'>Submit</Button>
+          <Button className='btnSubmit' size='sm' onClick={submitCert}>Submit</Button>
         </div>
       </form>
     </div>
@@ -423,9 +423,12 @@ function IssuePage(props) {
     <div>
   </div>
 
-  <div>
+  {/* <div>
     <button onClick={captureTestFile}>Test</button>
   </div>
+  <div>
+    <button >Test Uploader Address</button>
+  </div> */}
 
     {popup && (
         <NewWindow title='Document Preview'>

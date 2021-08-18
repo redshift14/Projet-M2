@@ -6,14 +6,15 @@
 
 .input-container {
   width: 100%;
-  height: 89vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  height: 85vh;
+  margin-top: 10px;
+  /* align-items: center; */
 }
 
 .input-form {
-  width: 70vw;
+  width: 90vw;
   padding: 1rem;
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
   background: #fff;

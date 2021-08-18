@@ -11,11 +11,12 @@ import VerifyPage from './components/layout/VerifyPage';
 import Web3 from 'web3';
 import Certification from './abis/Certification.json';
 
-function Router() {
+function Router() { 
 
   const [accountAddress, setAccountAddress] = useState('');
   const [certificationContract, setCertificationContract] = useState(null);
   const [certsTable, setCertsTable] = useState([]);
+  const [certInfoTable, setCertInfoTable] = useState([]);
 
   async function loadWeb3() {
     console.log('loading web3')
@@ -33,14 +34,14 @@ function Router() {
   }
 
   async function loadBlockchainData() {
-    console.log('reseting table in loadblockchain');
-    setCertsTable([]);
     console.log('loading blockchain data');
     //Declare Web3
     const web3 = window.web3;
     //Load account
     const accounts = await web3.eth.getAccounts();
+    console.log('Accounts ', accounts);
     setAccountAddress(accounts[0]);
+    console.log('Account Address State', accountAddress);
     const networkId = await web3.eth.net.getId();
     const networkData = Certification.networks[networkId];
     if (networkData) {
@@ -48,7 +49,7 @@ function Router() {
       const web3 = window.web3;
       const certification = new web3.eth.Contract(Certification.abi, networkData.address);
       setCertificationContract(certification);
-      console.log(certificationContract);
+      console.log('Certification Contract: ', certificationContract);
     }
     //Else
     else {
@@ -58,20 +59,18 @@ function Router() {
   }
 
   async function loadCertsTable() {
-    setCertsTable([]);
     // Get certs amount 
-    const certCount = await certificationContract.methods.certCount().call();
+    const certCount = await certificationContract.methods.getCertsCount().call();
     // Load certs and sort by the newest 
-    for (var i = certCount; i>=1; i--) {
-      const cert = await certificationContract.methods.certs(i).call();
+    console.log('CertCount: ', certCount);
+    for (var i = certCount-1; i >= 0; i--) {
+      const cert = await certificationContract.methods.certIndex(i).call();
       setCertsTable(certsTable => [...certsTable, cert]);
+      const certInfo = await certificationContract.methods.certs(cert).call();
+      setCertInfoTable(certInfoTable => [...certInfoTable, certInfo]);
     }
     console.log('certTable: ', certsTable);
-  }
-
-  function resetTable() {
-    console.log('Reseting table');
-    setCertsTable([]);
+    console.log('certInfoTable', certInfoTable);
   }
 
   const {studentLoggedin} = useContext(AuthContext);
@@ -86,7 +85,7 @@ function Router() {
           (studentLoggedin === false && verifierLoggedin === false && issuerLoggedin === false) && (
             <>
               <Route exact path="/">
-                <HomePage resetTable={resetTable}/>
+                <HomePage />
               </Route>
               <Route path="/register">
                 <Register />
@@ -102,7 +101,7 @@ function Router() {
           (studentLoggedin === true && verifierLoggedin === false && issuerLoggedin === false) && (
             <>
               <Route exact path="/">
-                <HomePage resetTable={resetTable}/>
+                <HomePage />
               </Route>
               <Route path="/student">
                 <div>Student</div>
@@ -115,10 +114,10 @@ function Router() {
           (studentLoggedin === false && verifierLoggedin === true && issuerLoggedin === false) && (
             <>
             <Route exact path="/">
-                <HomePage resetTable={resetTable} loadBlockchainData={loadBlockchainData} verifierLoggedin={verifierLoggedin} loadWeb3={loadWeb3}/>
+                <HomePage loadBlockchainData={loadBlockchainData} verifierLoggedin={verifierLoggedin} loadWeb3={loadWeb3} />
               </Route>
               <Route path="/verifier">
-                <VerifyPage />
+                <VerifyPage loadWeb3={loadWeb3} loadBlockchainData={loadBlockchainData} certificationContract={certificationContract}/>
               </Route>
             </>
           )
@@ -128,13 +127,13 @@ function Router() {
           (studentLoggedin === false && verifierLoggedin === false && issuerLoggedin === true)  && (
             <>
               <Route exact path="/">
-                <HomePage resetTable={resetTable} loadBlockchainData={loadBlockchainData} issuerLoggedin={issuerLoggedin} loadWeb3={loadWeb3}/>
+                <HomePage loadBlockchainData={loadBlockchainData} issuerLoggedin={issuerLoggedin} loadWeb3={loadWeb3}/>
               </Route>
               <Route path="/issuer">
                 <IssuePage loadWeb3={loadWeb3} loadBlockchainData={loadBlockchainData} certificationContract={certificationContract} accountAddress={accountAddress}/>
               </Route>
               <Route path="/issuerconsult">
-                <IssuerConsult loadCertsTable={loadCertsTable} certs={certsTable} setCerts={setCertsTable}/>
+                <IssuerConsult loadCertsTable={loadCertsTable} certs={certInfoTable} setCerts={setCertInfoTable} certsHashes={certsTable} setCertHashes={setCertsTable}/>
               </Route>
             </>
           )
