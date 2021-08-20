@@ -41,6 +41,7 @@ function IssuerConsult(props) {
                     <td>
                       <a
                         target="_blank"
+                        rel="noopener noreferrer"
                         href={"https://etherscan.io/address/" + cert.uploader}
                       >
                         {cert.uploader ? cert.uploader.substring(0,6) : '0x0'}

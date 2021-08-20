@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import { Button } from 'react-bootstrap';
 import './verifyPage.css';
 import fingerPrintImage from '../../img/fingerPrint.png';
@@ -7,42 +7,104 @@ import documentImage from '../../img/document.png';
 function VerifyPage(props) {
 
   const [isVerifiedById, setIsVerifiedById] = useState(false);
+  const [isVerifiedByFile, setIsVerifiedByFile] = useState(false);
   const [id, setId] = useState('');
-  const [success, setSuccess] = useState('');
-  const [error, setError] = useState('');
+  const [successById, setSuccessById] = useState('');
+  const [successByFile, setSuccessByFile] = useState('');
+  const [errorById, setErrorById] = useState('');
+  const [errorByFile, setErrorByFile] = useState('');
+  const [statusLeft, setStatusLeft] = useState('');
+  const [statusRight, setStatusRight] = useState('');
 
   useEffect(() => {
     props.loadWeb3();
     props.loadBlockchainData();
     return () => {
     }
-  }, [])
+  }, []);
 
-  async function testConfirm() {
-    console.log('Verifying');
-    const hashState = await props.certificationContract.methods.isExist(id).call();
-    setIsVerifiedById(hashState);
-    console.log('IsVerifiedById', isVerifiedById);
+  async function confirmByFile() {
+    if(!props.uploadedFileHash) {
+      setStatusRight('');
+      setErrorByFile('Please choose your file');
+      setTimeout(() => {
+        setErrorById('');
+        setErrorByFile('');
+      }, 3000);
+    } 
+    else {
+      console.log('Confirm By File');
+      const hashState = await props.certificationContract.methods.isExist(props.uploadedFileHash).call();
+      setIsVerifiedByFile(hashState);
+      console.log('IsVerifiedByFile', isVerifiedByFile);
+      setStatusRight('File confirmed and uploaded');
+    }
   }
 
-  function testVerify() {
-    if(isVerifiedById) {
-      setError('');
-      setSuccess(`Certificate verified, to view it click `);
+  function verifiyByFile() {
+    setStatusRight('');
+    if(isVerifiedByFile) {
+      setErrorByFile('');
+      setErrorById('');
+      setSuccessByFile(`Certificate verified`);
       setTimeout(() => {
-        setSuccess("");
+        setSuccessByFile('');
+        setSuccessById('');
       }, 10000);
     }
     else {
-      setSuccess('');
-      setError('Certificate not found');
+      setSuccessByFile('');
+      setSuccessById('');
+      setErrorByFile('Certificate not found');
       setTimeout(() => {
-        setError("");
+        setErrorByFile('');
+        setErrorById('');
       }, 3000);
     }
   }
 
-  function handleChange(e) {
+  async function confirmById() {
+    if(!id) {
+      setStatusLeft('');
+      setErrorById('Please enter the hash');
+      setTimeout(() => {
+        setErrorById('');
+        setErrorByFile('');
+      }, 3000);
+    }
+    else {
+      console.log('Verifying');
+      const hashState = await props.certificationContract.methods.isExist(id).call();
+      setIsVerifiedById(hashState);
+      console.log('IsVerifiedById', isVerifiedById);
+      setStatusLeft('File confirmed');
+    }
+  }
+
+  function verifyById() {
+    setStatusLeft('');
+    if(isVerifiedById) {
+      setStatusLeft('');
+      setErrorById('');
+      setErrorByFile('');
+      setSuccessById(`Certificate verified, to view it click `);
+      setTimeout(() => {
+        setSuccessById('');
+        setIsVerifiedByFile('');
+      }, 10000);
+    }
+    else {
+      setSuccessById('');
+      setIsVerifiedByFile('');
+      setErrorById('Certificate not found');
+      setTimeout(() => {
+        setErrorById('');
+        setErrorByFile('');
+      }, 3000);
+    }
+  }
+
+  function handleChangeById(e) {
     setId( id => e.target.value)
   }
 
@@ -50,17 +112,22 @@ function VerifyPage(props) {
     <div className='verify-page'>
       <div className='box'>
       <h2 className='box-title'>Verify by ID</h2>
+      <div className='instructions'>
+        <p>1- Fill in the text field with the hash of the certificate</p>
+        <p>2- Click the button confirm</p>
+        <p>3- Click the button verify, and you well get the result</p>
+      </div>
         <form className="verify-form">
-          <input type="text" placeholder='Certification ID' onChange={handleChange} className='id-input'/>
+          <input type="text" placeholder='Certification ID' onChange={handleChangeById} className='id-input'/>
           <div className='buttons'>
-            <Button className='btn' variant='dark' size='sm' style={{border:'none', height:'35px'}} onClick={testConfirm}>Click to Confirm</Button>
-            <Button className='btn' size='sm' style={{border:'none', height:'35px'}} onClick={testVerify}>Click to Verify</Button>
+            <Button className='btn' variant='dark' size='sm' style={{border:'none', height:'35px'}} onClick={confirmById}>Confirm</Button>
+            <Button className='btn' size='sm' style={{border:'none', height:'35px'}} onClick={verifyById}>Verify</Button>
           </div>
         </form>
         {
-          success && 
+          successById && 
           <span className="success-message">
-            {success}
+            {successById}
             <a 
               href={"https://ipfs.infura.io/ipfs/" + id}
               rel="noopener noreferrer"
@@ -71,28 +138,50 @@ function VerifyPage(props) {
             </a>
           </span>
         }
-        {error && <span className="error-message">{error}</span>}
+        {errorById && <span className="error-message">{errorById}</span>}
+        {statusLeft && <span className="status-message">{statusLeft}</span>}
         <div className='img-1-container'>
-          <img src={documentImage} className='img-1'/>
+          <img src={documentImage} className='img-1' alt='document'/>
         </div>
       </div>
 
       <div className='box'>
         <h2 className='box-title'>Verify by Uploading The Document</h2>
+        <div className='instructions'>
+          <p>1- Choose the certificate from your system, and click confirm</p>
+          <p>2- Click upload to upload the certificate to our system</p>
+          <p>3- Click the button verify, and you well get the result</p>
+        </div>
         <form className="verify-form">
-          <input type="file" placeholder='Choose your file' size='100' className='file-input' accept='application/pdf'/>
+          <input type="file" placeholder='Choose your file' size='100' className='file-input' accept='application/pdf' onChange={props.captureFile}/>
           <div className='buttons'>
-            <Button className='btn' variant='dark' size='sm' style={{border:'none', height:'35px'}}>Click to Confirm</Button>
-            <Button className='btn' size='sm' style={{border:'none', height:'35px'}}>Click to Verify</Button>
+            <div className='buttons-row'>
+              <Button className='btn' variant='dark' size='sm' style={{border:'none', height:'35px', marginRight: '9px'}} onClick={props.hashFile}>Confirm</Button>
+              <Button className='btn' variant='dark' size='sm' style={{border:'none', height:'35px', marginLeft: '9px'}} onClick={confirmByFile}>Upload</Button>
+            </div>
+            <Button className='btn' size='sm' style={{border:'none', height:'35px'}} onClick={verifiyByFile}>Verify</Button>
           </div>
         </form>
+        {successByFile && <span className="success-message">{successByFile}</span>}
+        {errorByFile && <span className="error-message">{errorByFile}</span>}
+        {statusRight && <span className="status-message">{statusRight}</span>}
         <div className='img-2-container'>
-          <img src={fingerPrintImage} className='img-2'/>
+          <img src={fingerPrintImage} className='img-2' alt='fingerPrint'/>
         </div>
       </div>
     </div>
-    
   )
 }
 
 export default VerifyPage;
+
+// 
+
+// hash with 64Base QmWoY2hCtvH8f9PiiZAab9s1o7Z6THx7kZcEq7UAarF5ms
+// hash with uint8array QmRnLR5EHsfH4M22C1tHCxHNstREmkNwCP24XLquNL13vg
+
+
+// testPDFHash 
+// QmVn8DJhVu6tR3TFpa1V2Bt4pgvJCwXcwpLgcRxxoWHU3J
+// QmVn8DJhVu6tR3TFpa1V2Bt4pgvJCwXcwpLgcRxxoWHU3J
+

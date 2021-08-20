@@ -11,8 +11,6 @@ const ipfs = create({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
 
 function IssuePage(props) {
 
-  const [certificationContract, setCertificationContract] = useState(null);
-
   const [popup, setPopup] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -66,7 +64,6 @@ function IssuePage(props) {
   useEffect(() => {
     props.loadWeb3();
     props.loadBlockchainData();
-    setCertificationContract(props.certificationContract);
   }, [])
 
   function HandleClick(e) {
@@ -148,28 +145,28 @@ function IssuePage(props) {
     }
   }
 
-  const captureTestFile = async () => {
-    const myPdf = await getPdfBlob();
-    console.log('mypdf: ', myPdf);
-    console.log('submitting the form');
-    const result = await ipfs.add(myPdf);
-    const fileHash = result["path"];
-    const fileSize = result["size"];
-    const fullName = name + ' ' + lastName;
-    console.log('Result ipfs: ', result);
-    console.log('Uploader address', props.accountAddress);
-    props.certificationContract.methods.insertCert(
-      fileHash, fileSize, certTitle, fullName 
-    )
-    .send({from: props.accountAddress})
-    .on('transactionHash', (hash) => {
-      handleEmail(fileHash);
-      setSuccess('File uploaded successfully and sent to the student');
-      setTimeout(() => {
-        setSuccess("");
-      }, 10000);
-    });
-  }
+  // const captureTestFile = async () => {
+  //   const myPdf = await getPdfBlob();
+  //   console.log('mypdf: ', myPdf);
+  //   console.log('submitting the form');
+  //   const result = await ipfs.add(myPdf);
+  //   const fileHash = result["path"];
+  //   const fileSize = result["size"];
+  //   const fullName = name + ' ' + lastName;
+  //   console.log('Result ipfs: ', result);
+  //   console.log('Uploader address', props.accountAddress);
+  //   props.certificationContract.methods.insertCert(
+  //     fileHash, fileSize, certTitle, fullName 
+  //   )
+  //   .send({from: props.accountAddress})
+  //   .on('transactionHash', (hash) => {
+  //     handleEmail(fileHash);
+  //     setSuccess('File uploaded successfully and sent to the student');
+  //     setTimeout(() => {
+  //       setSuccess("");
+  //     }, 10000);
+  //   });
+  // }
 
   const handleEmail = async (h) => {
     console.log('Sending Email');
@@ -425,9 +422,6 @@ function IssuePage(props) {
 
   {/* <div>
     <button onClick={captureTestFile}>Test</button>
-  </div>
-  <div>
-    <button >Test Uploader Address</button>
   </div> */}
 
     {popup && (

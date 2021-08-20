@@ -11,12 +11,17 @@ import VerifyPage from './components/layout/VerifyPage';
 import Web3 from 'web3';
 import Certification from './abis/Certification.json';
 
+const { create } = require('ipfs-http-client');
+const ipfs = create({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
+
 function Router() { 
 
   const [accountAddress, setAccountAddress] = useState('');
   const [certificationContract, setCertificationContract] = useState(null);
   const [certsTable, setCertsTable] = useState([]);
   const [certInfoTable, setCertInfoTable] = useState([]);
+  const [fileBlob, setFileBlob] = useState('');
+  const [uploadedFileHash, setUploadedFileHash] = useState('');
 
   async function loadWeb3() {
     console.log('loading web3')
@@ -72,6 +77,29 @@ function Router() {
     console.log('certTable: ', certsTable);
     console.log('certInfoTable', certInfoTable);
   }
+  
+  async function captureFileTest(e) {
+    const file = e.target.files[0];
+    const reader = new window.FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      const urlRes = reader.result;  
+      fetch(urlRes).then(res => res.blob()).then(setFileBlob);
+    } 
+    console.log('FileBlob', fileBlob);
+  }
+
+  async function hashFile() {
+    if(!fileBlob) {
+      console.log('error');
+    }
+    else {
+      console.log('submitting the form');
+      const result = await ipfs.add(fileBlob);
+      setUploadedFileHash(result["path"]);
+      console.log('Result ipfs: ', uploadedFileHash);  
+    }
+  }
 
   const {studentLoggedin} = useContext(AuthContext);
   const {verifierLoggedin} = useContext(AuthContext);
@@ -117,7 +145,7 @@ function Router() {
                 <HomePage loadBlockchainData={loadBlockchainData} verifierLoggedin={verifierLoggedin} loadWeb3={loadWeb3} />
               </Route>
               <Route path="/verifier">
-                <VerifyPage loadWeb3={loadWeb3} loadBlockchainData={loadBlockchainData} certificationContract={certificationContract}/>
+                <VerifyPage loadWeb3={loadWeb3} loadBlockchainData={loadBlockchainData} certificationContract={certificationContract} captureFile={captureFileTest} hashFile={hashFile} uploadedFileHash={uploadedFileHash}/>
               </Route>
             </>
           )
