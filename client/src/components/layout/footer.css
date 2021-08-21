@@ -1,0 +1,48 @@
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #212529;
+    width: 100%;
+    position: relative;
+    left: 0;
+    bottom: 0;
+}
+
+.info {
+    flex: 2;
+    margin-left: 20px;
+}
+
+.footer h2 {
+    font-size: 16px;
+    color: #ccc;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+.footer p {
+    font-size: 9px;
+    color: #ccc;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+.social {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+}
+
+.social-item {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.social .social-item img {
+    height: 20px;
+    width: 20px;
+}

@@ -23,8 +23,8 @@ function HomePage(props) {
         <div className='container-1'>
           <h1 className='lg-heading'>Certifier</h1>
           <h2 className='sm-heading'>Certificaion generator & verifier...</h2>
-          <p className='paragraph'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic nulla repellat
-            illum rem aliquam quo rerum quae, est, velit veniam. illum rem aliquam quo rerum quae, est, velit veniam</p>
+          <p className='paragraph'>A Blockchain based educational certificates generation and verification system, using the InterPlanetary File System IPFS, 
+          to store the certificates, and the ethereum blockchain to store the hashes of those certificates. </p>
         </div>
 
         <div className='image-container'>

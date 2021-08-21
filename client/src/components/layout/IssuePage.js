@@ -5,6 +5,7 @@ import './issuePage.css';
 import { Button } from 'react-bootstrap';
 import NewWindow from 'react-new-window';
 import axios from 'axios';
+import Footer from './Footer';
 
 const { create } = require('ipfs-http-client');
 const ipfs = create({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
@@ -181,7 +182,7 @@ function IssuePage(props) {
       const message = `Your certificate hash is ${h} you can view your certficate here: ${link}`;
       const data = { to, message } 
       await axios.post('http://localhost:5000/auth/sendMail', data, config);
-      console.log("Email Sent")
+      console.log("Email Sent");
     }
     catch (error) {
       console.log(error.response.data.error);
@@ -190,6 +191,7 @@ function IssuePage(props) {
 
   return (
     <>
+    <div className='holder'>
     <div className='input-container'>
       <form className='input-form' onSubmit={HandleClick}>
         {error && <span className="error-message">{error}</span>}
@@ -458,6 +460,8 @@ function IssuePage(props) {
           </div>
         </NewWindow>
       )}
+    </div>
+    <Footer/>
     </>
   );
 }

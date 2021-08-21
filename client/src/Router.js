@@ -10,6 +10,7 @@ import IssuerConsult from './components/layout/IssuerConsult';
 import VerifyPage from './components/layout/VerifyPage';
 import Web3 from 'web3';
 import Certification from './abis/Certification.json';
+import StudentPage from './components/layout/StudentPage';
 
 const { create } = require('ipfs-http-client');
 const ipfs = create({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' });
@@ -65,17 +66,19 @@ function Router() {
 
   async function loadCertsTable() {
     // Get certs amount 
-    const certCount = await certificationContract.methods.getCertsCount().call();
-    // Load certs and sort by the newest 
-    console.log('CertCount: ', certCount);
-    for (var i = certCount-1; i >= 0; i--) {
-      const cert = await certificationContract.methods.certIndex(i).call();
-      setCertsTable(certsTable => [...certsTable, cert]);
-      const certInfo = await certificationContract.methods.certs(cert).call();
-      setCertInfoTable(certInfoTable => [...certInfoTable, certInfo]);
+    if(certificationContract) {
+      const certCount = await certificationContract.methods.getCertsCount().call();
+      // Load certs and sort by the newest 
+      console.log('CertCount: ', certCount);
+      for (var i = certCount-1; i >= 0; i--) {
+        const cert = await certificationContract.methods.certIndex(i).call();
+        setCertsTable(certsTable => [...certsTable, cert]);
+        const certInfo = await certificationContract.methods.certs(cert).call();
+        setCertInfoTable(certInfoTable => [...certInfoTable, certInfo]);
+      }
+      console.log('certTable: ', certsTable);
+      console.log('certInfoTable', certInfoTable);
     }
-    console.log('certTable: ', certsTable);
-    console.log('certInfoTable', certInfoTable);
   }
   
   async function captureFileTest(e) {
@@ -132,7 +135,7 @@ function Router() {
                 <HomePage />
               </Route>
               <Route path="/student">
-                <div>Student</div>
+                <StudentPage loadBlockchainData={loadBlockchainData} loadWeb3={loadWeb3} certificationContract={certificationContract}/>
               </Route>
             </>
           )
@@ -161,7 +164,7 @@ function Router() {
                 <IssuePage loadWeb3={loadWeb3} loadBlockchainData={loadBlockchainData} certificationContract={certificationContract} accountAddress={accountAddress}/>
               </Route>
               <Route path="/issuerconsult">
-                <IssuerConsult loadCertsTable={loadCertsTable} certs={certInfoTable} setCerts={setCertInfoTable} certsHashes={certsTable} setCertHashes={setCertsTable}/>
+                <IssuerConsult loadCertsTable={loadCertsTable} certs={certInfoTable} setCerts={setCertInfoTable} certsHashes={certsTable} setCertHashes={setCertsTable} />
               </Route>
             </>
           )
