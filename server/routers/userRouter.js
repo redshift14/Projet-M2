@@ -182,7 +182,7 @@ router.post('/sendMail', async (req, res) => {
     res.status(200).json({ sucess: true, data: 'Email Sent'});
   }
   catch (error) {
-    console.log(error);
+    res.status(500).json({ sucess: false});
   }
 })
 

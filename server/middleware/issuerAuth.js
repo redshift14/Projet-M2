@@ -7,13 +7,10 @@ function issuerAuth (req, res, next) {
     if(!authToken)
       return res.status(401).json({errorMessage: "Unauthorizd"});
 
-    console.log(authToken);
-
     const verified = jwt.verify(authToken, process.env.JWT_SECRET);
     req.user = verified.user;
 
     const role = verified.role;
-    console.log(role);
 
     if(!(role === 'Issuer')) {
       return res.status(401).json({errorMessage: "Unauthorizd"});
@@ -21,7 +18,6 @@ function issuerAuth (req, res, next) {
     next();
   }
   catch (error) {
-    console.error(error);
     res.status(401).json({errorMessage: 'Unauthorizd'});
   }
 }

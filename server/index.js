@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const path = require('path');
 
 dotenv.config();
 
@@ -31,3 +32,16 @@ mongoose.connect(process.env.MONGODB_CONNECT, {
 // Routers
 app.use('/auth', require('./routers/userRouter'));
 app.use('/users', require('./routers/protectedRoutes'));
+
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  })
+}
+else {
+  app.get('/', (req, res) => {
+    res.send('Api Running');
+  })
+}

@@ -5,13 +5,13 @@
 }
 
 .holder{
-  min-height: calc(100vh - 137px);
+  min-height: calc(100vh - 143px);
 }
 
 body {
   font-family: 'Roboto', sans-serif;  line-height: 1.7;
-  background: #eee;
   color: #333;
+  background-color: white;
 }
 
 .form-group,
@@ -40,22 +40,16 @@ body {
 }
 
 .btn {
-  padding: 10px 20px;
   cursor: pointer;
   width: 100%;
   font-size: 0.9rem;
   border: none;
   margin-top: 0.5rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
 }
 
 .btn:hover {
   opacity: 0.8;
-}
-
-.btn-primary {
-  background-color: coral;
-  color: #fff;
 }
 
 .error-message {

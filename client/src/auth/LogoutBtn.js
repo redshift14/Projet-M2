@@ -23,7 +23,7 @@ function LogoutBtn() {
 
   return (
     <Nav className='justify-content-end'>
-      <Button style={{backgroundColor:'#eee', color:'#333', border:'none'}} size='sm' onClick={logout}>Logout</Button>
+      <Button className='btn' style={{backgroundColor:'#eee', color:'#333', border:'none', height:'35px'}} size='sm' onClick={logout}>Logout</Button>
     </Nav>
   )
 }

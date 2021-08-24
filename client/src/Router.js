@@ -25,7 +25,6 @@ function Router() {
   const [uploadedFileHash, setUploadedFileHash] = useState('');
 
   async function loadWeb3() {
-    console.log('loading web3')
     //Setting up Web3
     if(window.ethereum) {
       window.web3 = new Web3(window.ethereum);
@@ -40,14 +39,11 @@ function Router() {
   }
 
   async function loadBlockchainData() {
-    console.log('loading blockchain data');
     //Declare Web3
     const web3 = window.web3;
     //Load account
     const accounts = await web3.eth.getAccounts();
-    console.log('Accounts ', accounts);
     setAccountAddress(accounts[0]);
-    console.log('Account Address State', accountAddress);
     const networkId = await web3.eth.net.getId();
     const networkData = Certification.networks[networkId];
     if (networkData) {
@@ -55,7 +51,6 @@ function Router() {
       const web3 = window.web3;
       const certification = new web3.eth.Contract(Certification.abi, networkData.address);
       setCertificationContract(certification);
-      console.log('Certification Contract: ', certificationContract);
     }
     //Else
     else {
@@ -69,15 +64,12 @@ function Router() {
     if(certificationContract) {
       const certCount = await certificationContract.methods.getCertsCount().call();
       // Load certs and sort by the newest 
-      console.log('CertCount: ', certCount);
       for (var i = certCount-1; i >= 0; i--) {
         const cert = await certificationContract.methods.certIndex(i).call();
         setCertsTable(certsTable => [...certsTable, cert]);
         const certInfo = await certificationContract.methods.certs(cert).call();
         setCertInfoTable(certInfoTable => [...certInfoTable, certInfo]);
       }
-      console.log('certTable: ', certsTable);
-      console.log('certInfoTable', certInfoTable);
     }
   }
   
@@ -89,7 +81,6 @@ function Router() {
       const urlRes = reader.result;  
       fetch(urlRes).then(res => res.blob()).then(setFileBlob);
     } 
-    console.log('FileBlob', fileBlob);
   }
 
   async function hashFile() {
@@ -97,10 +88,8 @@ function Router() {
       console.log('error');
     }
     else {
-      console.log('submitting the form');
       const result = await ipfs.add(fileBlob);
       setUploadedFileHash(result["path"]);
-      console.log('Result ipfs: ', uploadedFileHash);  
     }
   }
 

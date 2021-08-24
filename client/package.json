@@ -16,7 +16,8 @@
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0",
     "bootstrap": "^5.0.2",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
+    "ganache-cli": "^6.12.2",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^50.1.2",
     "moment": "^2.29.1",
@@ -29,6 +30,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "truffle": "^5.4.3",
+    "truffle-hdwallet-provider": "^1.0.17",
     "truffle-hdwallet-provider-privkey": "^0.3.0",
     "web-vitals": "^1.1.2",
     "web3": "^1.4.0"

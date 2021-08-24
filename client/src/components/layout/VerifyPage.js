@@ -34,10 +34,8 @@ function VerifyPage(props) {
       }, 3000);
     } 
     else {
-      console.log('Confirm By File');
       const hashState = await props.certificationContract.methods.isExist(props.uploadedFileHash).call();
       setIsVerifiedByFile(hashState);
-      console.log('IsVerifiedByFile', isVerifiedByFile);
       setStatusRight('File confirmed and uploaded');
     }
   }
@@ -74,10 +72,8 @@ function VerifyPage(props) {
       }, 3000);
     }
     else {
-      console.log('Verifying');
       const hashState = await props.certificationContract.methods.isExist(id).call();
       setIsVerifiedById(hashState);
-      console.log('IsVerifiedById', isVerifiedById);
       setStatusLeft('File confirmed');
     }
   }

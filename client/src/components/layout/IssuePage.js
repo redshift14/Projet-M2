@@ -125,13 +125,10 @@ function IssuePage(props) {
     }
     else {
       const myPdf = await getPdfBlob();
-      console.log('submitting the form');
       const result = await ipfs.add(myPdf);
       const fileHash = result["path"];
       const fileSize = result["size"];
       const fullName = name + ' ' + lastName;
-      console.log('Result ipfs: ', result);
-      console.log('Uploader address', props.accountAddress);
       props.certificationContract.methods.insertCert(
         fileHash, fileSize, certTitle, fullName 
       )
@@ -170,7 +167,6 @@ function IssuePage(props) {
   // }
 
   const handleEmail = async (h) => {
-    console.log('Sending Email');
     const config = {
       header: {
         "Content-Type": "application/json"
@@ -182,7 +178,6 @@ function IssuePage(props) {
       const message = `Your certificate hash is ${h} you can view your certficate here: ${link}`;
       const data = { to, message } 
       await axios.post('http://localhost:5000/auth/sendMail', data, config);
-      console.log("Email Sent");
     }
     catch (error) {
       console.log(error.response.data.error);
@@ -410,11 +405,12 @@ function IssuePage(props) {
             className='btnPreview'
             variant='dark'
             size='sm'
+            style={{border:'none', height:'35px'}}
             onClick={() => setPopup(!popup)}
           >
             Preview
           </Button>
-          <Button className='btnSubmit' size='sm' onClick={submitCert}>Submit</Button>
+          <Button className='btnSubmit' size='sm' onClick={submitCert} style={{border:'none', height:'35px'}}>Submit</Button>
         </div>
       </form>
     </div>

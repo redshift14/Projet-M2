@@ -19,13 +19,11 @@ function StudentPage(props) {
 
     async function loadStudentTable() {
         setCertTable([]);
-        console.log('Verifying');
         const hashState = await props.certificationContract.methods.isExist(hash).call();
         setIsExistHash(hashState);
         if(hashState) {
             const studentCert = await props.certificationContract.methods.certs(hash).call();
             setCertTable(certTable => [...certTable, studentCert]);
-            console.log('Student Table', certTable);
         }
         else {
             setError('Certificate not found');
