@@ -99,7 +99,7 @@ function VerifyPage(props) {
         setErrorByFile('');
       }, 3000);
     }
-  }
+  } 
 
   function handleChangeById(e) {
     setId( id => e.target.value)
@@ -107,6 +107,7 @@ function VerifyPage(props) {
 
   return (
     <>
+    <div className='holder'>
       <div className='verify-page'>
         <div className='box'>
         <h2 className='box-title'>Verify by ID</h2>
@@ -167,6 +168,7 @@ function VerifyPage(props) {
             <img src={fingerPrintImage} className='img-2' alt='fingerPrint'/>
           </div>
         </div>
+      </div>
       </div>
       <Footer/>
     </>

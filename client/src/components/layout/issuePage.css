@@ -6,11 +6,11 @@
 
 .input-container {
   width: 100%;
-  display: flex;
+  display: flex; 
   justify-content: center;
-  margin-top: 10px;
+  margin-top: 30px;
   margin-bottom: 30px;
-}
+} 
 
 .input-form {
   width: 90vw;
@@ -23,6 +23,7 @@
   font-size: 14px;
   font-weight: bold;
   margin-top: 8px;
+  margin-bottom: 10px;
   color: #333;
 }
 
@@ -57,7 +58,7 @@
 .form-element-container,
 .form-element-container input {
   width: 100%;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.4rem;
   padding-left: 0.5rem;
   padding-left: 0.5rem;
 }
@@ -69,7 +70,7 @@
   background-color: #eee;
   outline-width: 0;
   font-size: 0.8rem;
-  height: 30px;
+  height: 35px;
 }
 
 .form-element-container input:focus {
@@ -135,5 +136,16 @@
   .forth-step-form-container {
     display: flex;
     flex-direction: column;
+  }
+}
+
+@media screen and (min-width: 1281px) {
+  .input-container {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .input-form {
+    width: 95vw;
   }
 }

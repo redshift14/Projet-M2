@@ -187,7 +187,7 @@ function IssuePage(props) {
   return (
     <>
     <div className='holder'>
-    <div className='input-container'>
+    <div className='input-container'> 
       <form className='input-form' onSubmit={HandleClick}>
         {error && <span className="error-message">{error}</span>}
         {success && <span className="success-message">{success}</span>}
@@ -413,14 +413,12 @@ function IssuePage(props) {
           <Button className='btnSubmit' size='sm' onClick={submitCert} style={{border:'none', height:'35px'}}>Submit</Button>
         </div>
       </form>
+      
     </div>
 
-    <div>
   </div>
+  <Footer/>
 
-  {/* <div>
-    <button onClick={captureTestFile}>Test</button>
-  </div> */}
 
     {popup && (
         <NewWindow title='Document Preview'>
@@ -456,8 +454,6 @@ function IssuePage(props) {
           </div>
         </NewWindow>
       )}
-    </div>
-    <Footer/>
     </>
   );
 }

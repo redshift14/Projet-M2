@@ -23,7 +23,7 @@ function IssuerConsult(props) {
           <Table striped bordered hover className='table table-1' responsive='md'>
             <thead style={{fontSize:'12px'}}>
               <tr>
-                <th scope="col" style={{width: '10px'}}>#</th>
+                <th scope="col" style={{width: '10px'}}>#</th> 
                 <th scope="col" style={{ width: '300px'}}>Student Name</th>
                 <th scope="col" style={{ width: '200px'}}>Certificate Title</th>
                 <th scope="col" style={{ width: '150px'}}>File Size</th>
@@ -61,7 +61,7 @@ function IssuerConsult(props) {
           <Table striped bordered hover className='table table-2' responsive='md'> 
             <thead style={{fontSize:'12px'}}>
               <tr>
-                <th scope="col" style={{ width: '100px'}}>View</th>
+                <th scope="col" style={{ width: '400px'}}>View</th>
               </tr>
             </thead>
             {
