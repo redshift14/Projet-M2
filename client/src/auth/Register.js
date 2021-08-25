@@ -26,7 +26,7 @@ function Register() {
 
     try {
       const registerData = { displayName, email, password, passwordVerify, role }
-      await axios.post("http://localhost:5000/auth/register", registerData);
+      await axios.post("/auth/register", registerData);
       getStudentLoggedin();
       getVerifierLoggedin();
       getIssuerLoggedin();

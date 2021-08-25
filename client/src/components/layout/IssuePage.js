@@ -177,7 +177,7 @@ function IssuePage(props) {
       const link = `https://ipfs.infura.io/ipfs/${h}`
       const message = `Your certificate hash is ${h} you can view your certficate here: ${link}`;
       const data = { to, message } 
-      await axios.post('http://localhost:5000/auth/sendMail', data, config);
+      await axios.post('/auth/sendMail', data, config);
     }
     catch (error) {
       console.log(error.response.data.error);

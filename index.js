@@ -15,7 +15,7 @@ app.listen(PORT, () => console.log(`server running on port ${PORT}`));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: ["http://localhost:5000"],
+  origin: ["*"],
   credentials: true // this will alow the source to accept cookies
 }));
 

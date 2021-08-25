@@ -23,7 +23,7 @@ function Login () {
 
     try {
       const loginData = { email, password }
-      await axios.post("http://localhost:5000/auth/login", loginData);
+      await axios.post("/auth/login", loginData);
       getStudentLoggedin();
       getVerifierLoggedin();
       getIssuerLoggedin();
