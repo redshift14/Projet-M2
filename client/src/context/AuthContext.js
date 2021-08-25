@@ -10,17 +10,17 @@ function AuthContextProvider(props) {
   const [verifierLoggedin, setVerifierLoggedin] = useState(undefined);
 
   async function getStudentLoggedin() {
-    const studentLoggedinResponse = await axios.get('http://localhost:5000/auth/studentloggedin');
+    const studentLoggedinResponse = await axios.get('/auth/studentloggedin');
     setStudentLoggedin(studentLoggedinResponse.data);
   }
 
   async function getVerifierLoggedin() {
-    const verifierLoggedinResponse = await axios.get('http://localhost:5000/auth/verifierloggedin');
+    const verifierLoggedinResponse = await axios.get('/auth/verifierloggedin');
     setVerifierLoggedin(verifierLoggedinResponse.data);
   }
 
   async function getIssuerLoggedin() {
-    const issuerLoggedinResponse = await axios.get('http://localhost:5000/auth/issuerloggedin');
+    const issuerLoggedinResponse = await axios.get('/auth/issuerloggedin');
     setIssuerLoggedin(issuerLoggedinResponse.data);
   }
 
